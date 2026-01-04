@@ -55,7 +55,7 @@ RAM_MB=2048
 STORAGE="local-lvm"
 BRIDGE="vmbr0"
 PASSWORD="rsshub123"
-TEMPLATE="debian-12-standard_12.7-1_amd64.tar.zst"
+TEMPLATE="debian-12-standard_12.12-1_amd64.tar.zst"
 
 echo -e "${YELLOW}Настройки по умолчанию:${NC}"
 echo "Container ID: $CTID"
@@ -95,9 +95,9 @@ echo ""
 
 # Проверка и загрузка шаблона
 msg_info "Проверка наличия Debian 12 template..."
-if ! pveam list $STORAGE | grep -q "$TEMPLATE"; then
+if ! pveam list local | grep -q "$TEMPLATE"; then
     msg_warn "Template не найден, загружаю..."
-    pveam download $STORAGE $TEMPLATE
+    pveam download local $TEMPLATE
     msg_ok "Template загружен"
 else
     msg_ok "Template найден"
@@ -105,7 +105,7 @@ fi
 
 # Создание контейнера
 msg_info "Создание LXC контейнера..."
-pct create $CTID $STORAGE:vztmpl/$TEMPLATE \
+pct create $CTID local:vztmpl/$TEMPLATE \
     --hostname $HOSTNAME \
     --cores $CPU_CORES \
     --memory $RAM_MB \
